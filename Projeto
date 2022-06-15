@@ -1,0 +1,188 @@
+# CRIAÇÃO DO BANCO DE DADOS:
+
+CREATE DATABASE bdUniversidade
+
+USE bdUniversidade
+
+# CRIAÇÃO DAS TABELAS:
+
+CREATE TABLE tbCurso (
+    idCurso INT IDENTITY(1,1)
+    , descCurso VARCHAR(50) NOT NULL
+    , CONSTRAINT pkCurso PRIMARY KEY(idCurso))
+    
+CREATE TABLE tbTurma (
+    idTurma INT IDENTITY(1,1)
+    , periodo VARCHAR(5) NOT NULL
+    , semestre INT NOT NULL
+    , idCurso INT FOREIGN KEY REFERENCES tbCurso(idCurso)
+    , CONSTRAINT pkTurma PRIMARY KEY(idTurma)
+    )
+    
+CREATE TABLE tbAluno(
+    idAluno INT IDENTITY(1,1)
+    , nomeAluno VARCHAR(60) NOT NULL
+    , cpfAluno VARCHAR(14) NOT NULL
+    , idTurma INT FOREIGN KEY REFERENCES tbTurma(idTurma)
+    , CONSTRAINT pkAluno PRIMARY KEY(idAluno)
+    )
+    
+CREATE TABLE tbProfessor(
+    idProfessor INT IDENTITY(1,1)
+    , nomeProfessor VARCHAR(60) NOT NULL
+    , cpfProfessor VARCHAR(14) NOT NULL
+    , CONSTRAINT pkProfessor PRIMARY KEY(idProfessor)
+    )
+    
+CREATE TABLE tbDisciplina(
+    idDisciplina INT IDENTITY(1,1)
+    , descDisciplina VARCHAR(30) NOT NULL
+    , idProfessor INT FOREIGN KEY REFERENCES tbProfessor(idProfessor)
+    , CONSTRAINT pkDisciplina PRIMARY KEY(idDisciplina)
+    )
+CREATE TABLE tbGrade(
+    idGrade INT IDENTITY(1,1)
+    , idTurma INT FOREIGN KEY REFERENCES tbTurma(idTurma) NOT NULL
+    , idDisciplina INT FOREIGN KEY REFERENCES tbDisciplina(idDisciplina) NOT
+    NULL
+    , dia VARCHAR(20) NOT NULL
+    , CONSTRAINT pkGrade PRIMARY KEY(idGrade)
+    )
+    
+CREATE TABLE tbMatricula(
+    idMatricula INT IDENTITY(1,1)
+    , statusMatricula VARCHAR(30) NOT NULL
+    , idAluno INT FOREIGN KEY REFERENCES tbAluno(idAluno)
+    , CONSTRAINT pkMatricula PRIMARY KEY(idMatricula)
+    )
+    
+CREATE TABLE tbBoletim(
+    idBoletim INT IDENTITY(1,1)
+    , idAluno INT FOREIGN KEY REFERENCES tbAluno(idAluno) NOT NULL
+    , idDisciplina INT FOREIGN KEY REFERENCES tbDisciplina(idDisciplina) NOT
+    NULL
+    , a1 FLOAT
+    , a2 FLOAT
+    , a3 FLOAT
+    , a4 FLOAT
+    , total FLOAT
+    , statusBoletim VARCHAR(20)
+    , frequencia INT NOT NULL
+    )
+    
+INSERT
+
+USE bdUniversidade
+
+INSERT INTO tbCurso (descCurso) VALUES ('Ciência da Computação')
+, ('Análise e Desenvolvimento de Sistemas')
+, ('Segurança da Informação')
+, ('Gestão da Tecnologia da Informação')
+
+INSERT INTO tbTurma (periodo, semestre, idCurso) VALUES ('Noite', 3, 1)
+, ('Noite', 1, 2)
+, ('Manhã', 4, 3)
+, ('Manhã', 3, 4)
+
+INSERT INTO tbAluno (nomeAluno, cpfAluno, idturma) VALUES ('João Marques',
+'123.456.789-01', 1)
+, ('Silas Duarte', '234.567.890-12', 1)
+, ('Matheus Santos', '345.678.901-23', 1)
+, ('Ana Beatriz', '456.789.012-34', 2)
+, ('Carlos Eduardo Rocha', '567.890.123-45', 2)
+, ('Diego Silva', '678.901.234-56', 2)
+, ('Isabella Rosa', '789.012.345-67', 3)
+, ('Cristiane Reis', '890.123.456-78', 3)
+, ('Gustavo dos Santos', '901.234.567-89', 3)
+, ('Bianca Rocha', '134.567.890-12', 4)
+, ('Paulo Santana', '345.678.901-45', 4)
+, ('Patricia Magno', '378.901.234-59', 4)
+
+INSERT INTO tbProfessor(nomeProfessor, cpfProfessor) VALUES ('Ademir Villa',
+'987.345.267-45')
+, ('André Vitorino', '345.643.789-67')
+, ('Luciana Santiago', '456.246.785-98')
+, ('Thiago Souza', '489.274.785-87')
+, ('Rita de Cássia', '452.785.156-63')
+, ('Carlos Dias', '674.235.257-23')
+
+INSERT INTO tbDisciplina(descDisciplina, idProfessor) VALUES ('Banco de Dados',
+1)
+, ('Fundamentos Para Computação', 2)
+, ('Inteligência Artificial', 3)
+, ('Gestão de Projetos', 4)
+, ('Matemática', 3)
+, ('Estrutura de Dados', 5)
+, ('Data Science', 6)
+, ('POO', 6)
+
+INSERT INTO tbGrade(idTurma, idDisciplina, dia) VALUES (1, 1, 'Segunda-feira')
+, (1, 2, 'Sexta-feira')
+, (2, 1, 'Terça-Feira')
+, (2, 2, 'Quinta-feira')
+, (3, 5, 'Segunda-feira')
+, (3, 8, 'Sexta-feira')
+, (3, 3, 'Quarta-feira')
+, (4, 3, 'Sexta-feira')
+, (4, 6, 'Terça-feira')
+, (4, 4, 'Segunda-feira')
+
+INSERT INTO tbMatricula (statusMatricula, idAluno) VALUES ('Em andamento', 1)
+, ('Em andamento', 2)
+, ('Em andamento', 3)
+, ('Em andamento', 4)
+, ('Em andamento', 5)
+, ('Em andamento', 6)
+, ('Trancado', 7)
+, ('Trancado', 8)
+, ('Encerrado', 9)
+, ('Em andamento', 10)
+, ('Em andamento', 11)
+, ('Em andamento', 12)
+
+INSERT INTO tbBoletim(idAluno, idDisciplina, a1, a2, a3, a4, total,
+statusBoletim, frequencia) VALUES (1, 1, '8.9','6.8','','','','', '80')
+, (1, 2, '6.7','5.0','','','','','70')
+, (2, 1, '8.9','2.0','','','','','70')
+, (2, 2, '8.9','10.0','','','','','70')
+, (3, 2, '8.5','6.0','','','','','80')
+, (3, 2, '8.4','7.8','','','','','90')
+, (4, 2, '5.2','2.7','','','','','30')
+, (4, 2, '8.1','5.7','','','','','70')
+, (5, 2, '8.0','4.8','','','','','90')
+, (5, 2, '8.4','8.3','','','','','100')
+, (6, 2, '8.5','6.7','','','','','100')
+, (6, 2, '8.6','7.9','','','','','89')
+, (7, 2, '8.7','9.0','','','','','90')
+, (7, 2, '8.8','7.5','','','','','80')
+, (7, 2, '9.9','8.9','','','','','90')
+, (8, 2, '9.8','7.5','','','','','75')
+, (8, 2, '7.0','3.7','','','','','65')
+, (8, 2, '6.0','8.2','','','','','75')
+, (9, 2, '5.9','4.1','','','','','75')
+, (9, 2, '8.6','7.9','','','','','70')
+, (9, 2, '4.5','2.0','','','','','20')
+, (10, 2, '7.6','5.8','','','','','60')
+, (10, 2, '6.7','8.3','','','','','87')
+, (10, 2, '2.5','6.0','','','','','40')
+, (11, 2, '10.0','8.5','','','','','100')
+, (11, 2, '9.0','9.0','','','','','71')
+, (11, 2, '8.9','9.0','','','','','75')
+, (12, 2, '5.6','6.0','','','','','90')
+, (12, 2, '7.8','8.0','','','','','90')
+, (12, 2, '5.0','7.5','','','','','70')
+
+USE bdUniversidade
+
+UPDATE tbBoletim
+    SET total = (a1 + a2 + a3 + a4)/ 4
+    
+UPDATE tbBoletim
+SET statusBoletim = 'Aprovado'
+Where frequencia > 74 AND total > 6.0
+
+UPDATE tbBoletim
+SET statusBoletim = 'Não aprovado'
+Where frequencia < 74 AND total < 6.0
+
+COMMIT;
